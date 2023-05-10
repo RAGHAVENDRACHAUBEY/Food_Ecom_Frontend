@@ -10,10 +10,11 @@ const Footer = () => {
         <Row>
           <Col lg="3" md="4" sm="6">
             <div className=" footer__logo text-start">
-              <img src='/images/food-logo-footer.png' alt="logo" />
-             
+              <img src="/images/food-logo-footer.png" alt="logo" />
+
               <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto consequuntur culpa animi corrupti dolorum quod.
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto
+                consequuntur culpa animi corrupti dolorum quod.
               </p>
             </div>
           </Col>
@@ -40,7 +41,7 @@ const Footer = () => {
                 <p>Location: ZindaBazar, Sylhet-3100, Bangladesh</p>
               </ListGroupItem> */}
               <ListGroupItem className=" delivery__time-item border-0 ps-0">
-                <span>Phone: +918081475780</span>
+                <span>Phone: +919473925485</span>
               </ListGroupItem>
 
               <ListGroupItem className=" delivery__time-item border-0 ps-0">
@@ -64,20 +65,37 @@ const Footer = () => {
         <Row className="mt-5">
           <Col lg="8" md="8">
             <p className="copyright__text">
-            Copyright 2023-2024, All Right Reserved, Website Design & Develop by Raghavendra Chaubey.   
-            
+              Copyright 2023-2024, All Right Reserved, Website Design & Develop
+              by{" "}
+              <span
+                style={{
+                  fontSize: "18px",
+                  color: "#f5951a",
+                  fontWeight: "700",
+                }}
+              >
+                Raghavendra Chaubey
+              </span>
+              .
             </p>
           </Col>
           <Col lg="4" md="4">
             <div className="social__links d-flex align-items-center gap-4 justify-content-end">
               <p className="m-0">Follow: </p>
               <div className="social-icons">
-              <Link to="#"><i class="ri-facebook-fill"></i></Link>
-              <Link to="#"><i class="ri-instagram-line"></i></Link>
-              <Link to="#"><i class="ri-twitter-line"></i></Link>
-              <Link to="#"><i class="ri-linkedin-fill"></i></Link>
-            </div>
-             
+                <Link to="#">
+                  <i class="ri-facebook-fill"></i>
+                </Link>
+                <Link to="#">
+                  <i class="ri-instagram-line"></i>
+                </Link>
+                <Link to="#">
+                  <i class="ri-twitter-line"></i>
+                </Link>
+                <Link to="#">
+                  <i class="ri-linkedin-fill"></i>
+                </Link>
+              </div>
             </div>
           </Col>
         </Row>

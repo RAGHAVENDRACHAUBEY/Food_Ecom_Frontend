@@ -5,30 +5,80 @@ import Helmet from "./Helmet/Helmet";
 import "../styles/home.css";
 import Category from "./Category";
 import ProductCard from "./ProductCard";
-import products from "./fakedata/products";
+// import products from "./fakedata/products";
 import TestimonialSlider from "./TestimonialSlider";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 function Home1() {
-  const [allProducts, setAllProducts] = useState(products);
+  // All Prodcut
+  const [products, setproducts] = useState([]);
+  const [newProduct, setnewproduct] = useState([]);
+  // console.log(products);
+  const getProdcut = () => {
+    axios
+      .get("http://localhost:8000/api/v1/admin/allproduct")
+      .then(function (response) {
+        // handle success
+        setnewproduct(response.data.product);
+        setproducts(response.data.product);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getProdcut();
+    getcategory();
+  }, []);
+
+  // All Category
+  const [items, setitems] = useState([]);
+
+  console.log(items);
+  const getcategory = () => {
+    axios
+      .get("http://localhost:8000/api/v1/admin/allcategory")
+      .then(function (response) {
+        // handle success
+        // console.log(response.data);
+        getProdcut();
+        setitems(response.data.success);
+      })
+      .catch(function (error) {
+        // handle error
+        // console.log(error);
+      });
+  };
+
   const [acc, setacc] = useState(true);
   const [acc1, setacc1] = useState();
-  const [acc2, setacc2] = useState();
-  const [acc3, setacc3] = useState();
 
-  // filter Products
-  const filterResult = (fastitem) => {
-    const result = products.filter((itemdata) => {
-      return itemdata.category === fastitem;
-    });
-    setAllProducts(result);
+  // // filter Products
+  // const filterResult = (fastitem) => {
+  //   const result = products.filter((itemdata) => {
+  //     return itemdata.productcategory === fastitem;
+  //   });
+  //   setproducts(result);
+  // };
+  // category filter
+  const filterItem = (curcat) => {
+    if (!curcat) {
+      setproducts(newProduct);
+    } else {
+      const newItem = newProduct.filter((newVal) => {
+        return newVal?.productcategory === curcat;
+        // comparing category for displaying data
+      });
+      setproducts(newItem);
+    }
   };
+
   // Hot Pizza filter
+
   const [hotpizza, setHotPizza] = useState([]);
-  useEffect(() => {
-    const filteredPizza = products.filter((item) => item.category === "Pizza");
-    const slicePizza = filteredPizza.slice(0, 4);
-    setHotPizza(slicePizza);
-  }, []);
+  console.log(hotpizza);
 
   const featureData = [
     {
@@ -165,65 +215,44 @@ function Home1() {
                       acc ? "tab_active_0" : ""
                     }`}
                     onClick={() => {
-                      setAllProducts(products);
+                      filterItem("");
                       setacc(true);
                       setacc1(false);
-                      setacc2(false);
-                      setacc3(false);
                     }}
                   >
                     All
                   </button>
-                  <button
-                    className={`d-flex align-items-center gap-2 jk ${
-                      acc1 ? "tab_active_0" : ""
-                    }`}
-                    onClick={() => {
-                      filterResult("Burger");
-                      setacc(false);
-                      setacc1(true);
-                      setacc2(false);
-                      setacc3(false);
-                    }}
-                  >
-                    Burger
-                  </button>
-
-                  <button
-                    className={`d-flex align-items-center gap-2 jk ${
-                      acc2 ? "tab_active_0" : ""
-                    }`}
-                    onClick={() => {
-                      filterResult("Pizza");
-                      setacc(false);
-                      setacc1(false);
-                      setacc2(true);
-                      setacc3(false);
-                    }}
-                  >
-                    Pizza
-                  </button>
-
-                  <button
-                    className={`d-flex align-items-center gap-2 jk ${
-                      acc3 ? "tab_active_0" : ""
-                    }`}
-                    onClick={() => {
-                      filterResult("Bread");
-                      setacc(false);
-                      setacc1(false);
-                      setacc2(false);
-                      setacc3(true);
-                    }}
-                  >
-                    Bread
-                  </button>
+                  {items.map((pro) => {
+                    return (
+                      <button
+                        className={`d-flex align-items-center gap-2 jk ${
+                          acc1 ? "tab_active_0" : ""
+                        }`}
+                        onClick={() => {
+                          filterItem(pro.catname);
+                          setacc(false);
+                          setacc1(true);
+                        }}
+                      >
+                        {pro.catname}{" "}
+                      </button>
+                    );
+                  })}
                 </div>
               </Col>
 
-              {allProducts.map((item) => (
+              {products.map((item) => (
                 <Col lg="3" md="4" sm="6" xs="6" key={item.id} className="mt-5">
-                  <ProductCard item={item} />
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -10, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ProductCard item={item} />
+                    </motion.div>
+                  </AnimatePresence>
                 </Col>
               ))}
             </Row>
@@ -267,11 +296,14 @@ function Home1() {
                 <h2>Hot Pizza</h2>
               </Col>
 
-              {hotpizza.map((item) => (
-                <Col lg="3" md="4" sm="6" xs="6" key={item.id}>
-                  <ProductCard item={item} />
-                </Col>
-              ))}
+              {products
+                ?.filter((item) => item?.productcategory === "Pizza")
+                .slice(0, 4)
+                ?.map((item) => (
+                  <Col lg="3" md="4" sm="6" xs="6" key={item?.id}>
+                    <ProductCard item={item} />
+                  </Col>
+                ))}
             </Row>
           </Container>
         </section>

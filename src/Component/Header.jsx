@@ -4,8 +4,8 @@ import { Container, ListGroupItem } from "react-bootstrap";
 import { NavLink, Link } from "react-router-dom";
 import "./header.css";
 import axios from "axios";
-import { cartActions } from "./Store/ShopingCart/cartSlice";
-import {useSelector,useDispatch} from 'react-redux'
+
+import { useSelector } from "react-redux";
 
 const nav__links = [
   {
@@ -30,25 +30,8 @@ function Header() {
   const menuRef = useRef(null);
   const headerRef = useRef(null);
 
-  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-  const dispatch = useDispatch();
-  const incrementItem = () => {
-    dispatch(
-      cartActions.addItem()
-    );
-  };
- 
-  const cartProducts = useSelector((state) => state.cart.cartItems);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
-  const decreaseItem = (id) => {
-    dispatch(cartActions.removeItem(id));
-  };
-
-  const deleteItem = (id) => {
-    dispatch(cartActions.deleteItem(id));
-  };
-
-  
+  const { totalQty } = useSelector((state) => state.products);
+  // console.log(totalQty)
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
@@ -72,6 +55,28 @@ function Header() {
   }, []);
 
   // offcanvas
+
+  const [searchTerm, setSearchTerm] = useState("");
+  // console.log(searchTerm, "efiowri");
+  const [product, setproduct] = useState([]);
+  // console.log(product);
+  const getProdcut = () => {
+    axios
+      .get("http://localhost:8000/api/v1/admin/allproduct")
+      .then(function (response) {
+        // handle success
+        setproduct(response.data.product);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getProdcut();
+  }, []);
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -79,35 +84,123 @@ function Header() {
 
   const user = JSON.parse(sessionStorage.getItem("user"));
   const signout = () => {
-		try {
-			axios
-				.get("http://localhost:8000/api/user/signout/" + user._id)
-				.then(function (res) {
-					if (res.status == 200) {
-						sessionStorage.removeItem("user");
-						alert("Signout Success....!");
-						window.location.assign("/");
-						return;
-					} else {
-						alert("Signout Unsuccessfully");
-						return;
-					}
-				});
-		} catch (error) {
-			console.warn(error);
-			alert("Signout Unsuccessfully");
-		}
-	};
+    try {
+      axios
+        .get("http://localhost:8000/api/v1/auth/logout/" + user._id)
+        .then(function (res) {
+          if (res.status == 200) {
+            sessionStorage.removeItem("user");
+            alert("Signout Success....!");
+            window.location.assign("/");
+            return;
+          } else {
+            alert("Signout Unsuccessfully");
+            return;
+          }
+        });
+    } catch (error) {
+      console.warn(error);
+      alert("Signout Unsuccessfully");
+    }
+  };
 
+  let customer = JSON.parse(sessionStorage.getItem("user"));
+  let [wishlist, setwishlist] = useState([]);
+
+  const getwislist = () => {
+    axios
+      .get(
+        "http://localhost:8000/api/v1/user/getWishlistByCustomerId/" +
+          customer?._id
+      )
+      .then(function (response) {
+        console.log(response.data);
+        setwishlist(response.data.success);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    if (customer) {
+      getwislist();
+    }
+  }, []);
+  // console.log("raghu dekh yar", customer, wishlist);
   return (
     <>
       <header className="header" ref={headerRef}>
         <Container fluid>
           <div className="nav__wrapper d-flex align-items-center justify-content-between">
             <div className="logo">
-              <img src="/assets/images/food-logo.jpg" alt="logo" />
+              <Link to="/">
+                {" "}
+                <img src="/assets/images/food-logo.jpg" alt="logo" />
+              </Link>
             </div>
-
+            <div
+              className="search__widget d-flex align-items-center justify-content-between hgjt "
+              style={{
+                height: "54px",
+                width: " 20%",
+                marginLeft: "-60px",
+                border: "1px solid #8fd7219c",
+              }}
+            >
+              <input
+                type="text"
+                placeholder="I'm looking for...."
+                style={{
+                  height: "40px",
+                }}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <span>
+                <i class="ri-search-line"></i>
+              </span>
+              {searchTerm ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    zIndex: 1000,
+                    background: "white",
+                    top: "85px",
+                    left: "20%",
+                    padding: "10px 44px",
+                    width: "40%",
+                  }}
+                >
+                  {product
+                    .filter((item) => {
+                      if (searchTerm.value === "") {
+                        return item;
+                      }
+                      if (
+                        item.productname
+                          .toLowerCase()
+                          .includes(searchTerm.toLowerCase())
+                      ) {
+                        return item;
+                      } else {
+                        return console.log("not found");
+                      }
+                    })
+                    .map((item) => (
+                      <a href={`/fooddetails/${item?._id}`}>
+                        <div className="search-food_0">
+                          <img
+                            src={`http://localhost:8000/product/${item.productimage}`}
+                            alt="search-image"
+                            style={{ width: "40px", height: "40px" }}
+                          />
+                          <h6 style={{ color: "black" }}>{item.productname}</h6>
+                        </div>
+                      </a>
+                    ))}
+                </div>
+              ) : null}
+            </div>
             {/* ======= menu ======= */}
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>
               <div className="menu d-flex align-items-center gap-5">
@@ -132,28 +225,42 @@ function Header() {
                 onClick={handleShow}
                 // onClick={toggleCart}
               >
-                <i class="ri-shopping-basket-line"></i>
-                <span className="cart__badge">{totalQuantity}</span>
+                <Link to="/whishlist">
+                  <i class="ri-heart-line" title="whislist"></i>
+                  <span className="cart__badge">{wishlist.length}</span>
+                </Link>
+              </span>
+              <span
+                className="cart__icon"
+                onClick={handleShow}
+                // onClick={toggleCart}
+              >
+                <Link to="/cart">
+                  <i class="ri-shopping-basket-line" title="cart"></i>
+                  <span className="cart__badge">{totalQty}</span>
+                </Link>
               </span>
 
               {user ? (
                 <>
-                 <span className="user" style={{fontSize:"18px",fontWeight:"bold"}}>
-              <a> {user.name}</a>
-              </span>
-                  <span className="user" onClick={signout} style={{fontSize:"18px",fontWeight:"bold"}}>
-                  <a>Logout</a>   
+                  <span
+                    className="user"
+                    style={{ fontSize: "18px", fontWeight: "bold" }}
+                  >
+                    <a> {user.name}</a>
                   </span>
-                 
+                  <span
+                    className="user"
+                    onClick={signout}
+                    style={{ fontSize: "18px", fontWeight: "bold" }}
+                  >
+                    <a>Logout</a>
+                  </span>
                 </>
-               
-           
               ) : (
                 <>
                   <span className="user">
-                    <Link to="/register">
-                     Register
-                    </Link>
+                    <Link to="/login">Login</Link>
                   </span>
                 </>
               )}
@@ -167,7 +274,7 @@ function Header() {
       </header>
 
       {/* cart-icon  */}
-      <Offcanvas show={show} onHide={handleClose} placement="end" name="end">
+      {/* <Offcanvas show={show} onHide={handleClose} placement="end" name="end">
         <Offcanvas.Header closeButton>
         </Offcanvas.Header>
         <Offcanvas.Body>
@@ -222,7 +329,7 @@ function Header() {
                   </div>
      
         </Offcanvas.Body>
-      </Offcanvas>
+      </Offcanvas> */}
     </>
   );
 }

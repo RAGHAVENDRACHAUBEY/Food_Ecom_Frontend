@@ -1,0 +1,180 @@
+.css-dip3t8 {
+    height:100vh !important;
+    background-color:#ffff !important;
+}
+.ps-menuitem-root.css-16jkw2k a{
+    color: #29335d;
+    font-weight: 700;
+    border-radius: 0.3rem;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 17px;
+    margin:0px 10px;
+}
+
+.admin-header{
+    line-height: 0px;
+}
+.admin-header h3{
+    font-size: 21px;
+    font-weight: 700;
+    color: #8cc53e;
+}
+.admin-header p{
+    font-size: 13px;
+    color: #3333;
+}
+.css-kyhzew{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.main-header {
+    padding-left: 3%;
+    padding-right: 3%;
+    min-height: 72px;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(108,117,125,.25);
+}
+.main-header .col-search {
+    flex-grow: 0.5;
+}
+.main-header .col-nav {
+    display: flex;
+    align-items: center;
+}
+.main-header .nav {
+    align-items: center;
+}
+.main-header .nav-item>a {
+    border-radius: 0.25rem;
+    color: #adb5bd;
+    display: block;
+    text-decoration: none;
+}
+.btn-icon {
+    text-align: center;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+.nav-item img.rounded-circle {
+    border: 2px solid #eee;
+}
+
+.img-xs {
+    width: 40px;
+    height: 40px;
+}
+.main-header .nav-item>a {
+    border-radius: 0.25rem;
+    color: #adb5bd;
+    display: block;
+    text-decoration: none;
+}
+.btn-light.bg {
+    background-color: #fff;
+    border-color: rgba(108,117,125,.25);
+}
+.css-16jkw2k >.ps-menu-button:hover {
+    background-color: #f49527 !important;
+    color: white !important;
+    transform: translateY(-5px);
+    transition: all 0.4s ease-in-out;
+}
+.css-16jkw2k >.ps-menu-button:hover .ckjd{
+    color: white ;
+  
+}
+.css-1wvake5 {
+    position: relative;
+    border: 2px solid #c3f19d !important;
+}
+.right-h{
+    background-color: #f8f9fa;
+    height:100vh;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.icontext {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+}
+.icontext .icon {
+    position: relative;
+    flex-shrink: 0;
+    border: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+}
+.icon-sm {
+    width: 48px;
+    height: 48px;
+    line-height: 48px!important;
+    font-size: 20px;
+}
+.com_use{
+    padding: 30px;
+}
+.jbm{
+    text-shadow: 1px 1px 1px #00000085, 3px 3px 3px #0c0c0cab;
+}
+.shadow-sm-0 {
+
+    box-shadow: rgb(140 197 62 / 69%) 1px 1px 6px 2px, rgb(140 197 62 / 60%) 1px 2px 6px 2px !important;
+}
+.content-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+.jmall_parwez a{
+    color: white;
+    background-color: #e79828;
+    padding: 10px;
+    border-radius: 2px;
+}
+.card-body .form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #8fc53f;
+    outline: 0;
+    box-shadow: 0px 0px 5px 0rem rgb(136 187 61 / 77%);
+}
+.card-user .card-header {
+    position: relative;
+    height: 100px;
+    background-color: #c3f19d!important;
+    text-align: center;
+}
+.card-user .img-avatar {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 100%;
+}
+
+.img-md {
+    width: 112px;
+    height: 112px;
+}
+.shadow-sm-0:hover{
+    transform: translateY(-5px);
+    transition: all 0,3s ease-in;
+}
+.ri-eye-line{
+    color: #e79828;
+    font-size: 25px;
+}
+.ri-edit-2-line{
+    color: green;
+    font-size: 25px;
+}
+.ri-delete-bin-line{
+    color: red;
+    font-size: 25px;
+}

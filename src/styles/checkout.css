@@ -1,19 +1,35 @@
 .checkout__bill {
-    background: #fde4e4;
-    padding: 30px;
+  background: #fde4e4;
+  padding: 30px;
+}
+
+.checkout__total {
+  border-top: 1px solid #ddd;
+  padding-top: 30px;
+}
+.deffer {
+  display: flex;
+  justify-content: space-between;
+}
+.addre_0 {
+  display: flex;
+  gap: 20px;
+}
+.form__group select {
+  width: 100%;
+  background: transparent;
+  padding: 7px 20px;
+  border: none;
+  border: 1px solid #2122454c;
+  color: grey;
+  outline: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .checkout__bill h6 {
+    font-size: 0.9rem;
   }
-  
-  .checkout__total {
-    border-top: 1px solid #ddd;
-    padding-top: 30px;
+  .checkout__bill {
+    margin-top: 40px;
   }
-  
-  @media only screen and (max-width: 768px) {
-    .checkout__bill h6 {
-      font-size: 0.9rem;
-    }
-    .checkout__bill {
-      margin-top: 40px;
-    }
-  }
-  
+}

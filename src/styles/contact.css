@@ -266,6 +266,11 @@ textarea.input {
   width: 50%;
   opacity: 1;
 }
+.eye_food{
+  position: absolute;
+  right: 5%;
+  top: 27%;
+}
 
 @media (max-width: 850px) {
   .form {
