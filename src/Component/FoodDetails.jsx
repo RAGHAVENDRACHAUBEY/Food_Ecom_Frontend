@@ -10,7 +10,7 @@ import Slider from "react-slick";
 // import { cartActions } from "./Store/ShopingCart/cartSlice";
 // import { useDispatch } from "react-redux";
 import axios from "axios";
-import {useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function FoodDetails() {
   const [singleproduct, setsingleprodcut] = useState({});
@@ -23,7 +23,10 @@ function FoodDetails() {
 
   const singleProdcut = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/singleproduct/" + id)
+      .get(
+        "https://food-ecom-backend-1.onrender.com/api/v1/admin/singleproduct/" +
+          id
+      )
       .then(function (response) {
         // console.log(response.data);
         setsingleprodcut(response.data.product);
@@ -38,7 +41,7 @@ function FoodDetails() {
   console.log(products);
   const getProdcut = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allproduct/")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allproduct/")
       .then(function (response) {
         // handle success
         // console.log(response.data.product);
@@ -96,18 +99,19 @@ function FoodDetails() {
     ],
   };
 
+  const dispatch = useDispatch();
+  const { addedProducts, totalQty, subTotalPrice, totalPrice } = useSelector(
+    (state) => state.products
+  );
 
-  const dispatch = useDispatch()
-  const {addedProducts, totalQty, subTotalPrice, totalPrice}=useSelector(state=>state.products)
-
-  // const [quickView, setQuickView] = useState(false)    
+  // const [quickView, setQuickView] = useState(false)
 
   useEffect(() => {
-      localStorage.setItem('addedProducts',JSON.stringify(addedProducts))
-      localStorage.setItem('totalQty', JSON.stringify(totalQty))
-      localStorage.setItem('subTotalPrice', JSON.stringify(subTotalPrice))
-      localStorage.setItem('totalPrice', JSON.stringify(totalPrice))
-  }, [addedProducts, totalQty, subTotalPrice, totalPrice])
+    localStorage.setItem("addedProducts", JSON.stringify(addedProducts));
+    localStorage.setItem("totalQty", JSON.stringify(totalQty));
+    localStorage.setItem("subTotalPrice", JSON.stringify(subTotalPrice));
+    localStorage.setItem("totalPrice", JSON.stringify(totalPrice));
+  }, [addedProducts, totalQty, subTotalPrice, totalPrice]);
 
   return (
     <>
@@ -124,7 +128,7 @@ function FoodDetails() {
                     onClick={() => setImage(singleproduct?.productimage)}
                   >
                     <img
-                      src={`http://localhost:8000/product/${singleproduct?.productimage}`}
+                      src={`https://food-ecom-backend-1.onrender.com/product/${singleproduct?.productimage}`}
                       alt=""
                       className="w-50"
                     />
@@ -134,7 +138,7 @@ function FoodDetails() {
                     onClick={() => setImage(singleproduct?.productsubimage1)}
                   >
                     <img
-                      src={`http://localhost:8000/product/${singleproduct?.productsubimage1}`}
+                      src={`https://food-ecom-backend-1.onrender.com/product/${singleproduct?.productsubimage1}`}
                       alt=""
                       className="w-50"
                     />
@@ -144,7 +148,7 @@ function FoodDetails() {
                     onClick={() => setImage(singleproduct?.productsubimage2)}
                   >
                     <img
-                      src={`http://localhost:8000/product/${singleproduct?.productsubimage2}`}
+                      src={`https://food-ecom-backend-1.onrender.com/product/${singleproduct?.productsubimage2}`}
                       alt=""
                       className="w-50"
                     />
@@ -155,7 +159,7 @@ function FoodDetails() {
                     onClick={() => setImage(singleproduct?.productsubimage3)}
                   >
                     <img
-                      src={`http://localhost:8000/product/${singleproduct?.productsubimage3}`}
+                      src={`https://food-ecom-backend-1.onrender.com/product/${singleproduct?.productsubimage3}`}
                       alt=""
                       className="w-50"
                     />
@@ -166,7 +170,7 @@ function FoodDetails() {
               <Col lg="4" md="4">
                 <div className="product__main-img">
                   <img
-                    src={`http://localhost:8000/product/${image}`}
+                    src={`https://food-ecom-backend-1.onrender.com/product/${image}`}
                     alt=""
                     className="w-100"
                   />
@@ -186,9 +190,14 @@ function FoodDetails() {
                     Category: <span>{singleproduct?.productcategory}</span>
                   </p>
                   <p className="category mb-5">{singleproduct?.productdis}</p>
-                  <button  className="addTOCart__btn" onClick={()=>dispatch({type:"ADD_TO_CART",payload:singleproduct})} >
-                  Add to Cart
-                </button>
+                  <button
+                    className="addTOCart__btn"
+                    onClick={() =>
+                      dispatch({ type: "ADD_TO_CART", payload: singleproduct })
+                    }
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </Col>
 
@@ -198,7 +207,8 @@ function FoodDetails() {
               <Slider {...settings}>
                 {products
                   ?.filter(
-                    (items) => items?.productcategory === singleproduct?.productcategory
+                    (items) =>
+                      items?.productcategory === singleproduct?.productcategory
                   )
                   ?.map((item) => (
                     <Row>

@@ -20,7 +20,7 @@ const TestimonialSlider = () => {
   // console.log(slider);
   const gettestinonials = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/getslider")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/getslider")
       .then(function (response) {
         // handle success
         // console.log(response.data.product);
@@ -44,7 +44,7 @@ const TestimonialSlider = () => {
             <p className="review__text">"{items.discription}"</p>
             <div className=" slider__content d-flex align-items-center gap-3 ">
               <img
-                src={`http://localhost:8000/slider/${items.image}`}
+                src={`https://food-ecom-backend-1.onrender.com/slider/${items.image}`}
                 alt="avatar"
                 className=" rounded"
               />

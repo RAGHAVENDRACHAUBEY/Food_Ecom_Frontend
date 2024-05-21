@@ -18,7 +18,7 @@ function AdminTestimonials() {
 
   const gettestimonials = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/getslider")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/getslider")
       .then(function (response) {
         // console.log(response.data.slider);
         setSlider(response.data.slider);
@@ -31,7 +31,10 @@ function AdminTestimonials() {
   // Delete
   const removetestimonials = (id) => {
     axios
-      .delete("http://localhost:8000/api/v1/admin/deletslider/" + id)
+      .delete(
+        "https://food-ecom-backend-1.onrender.com/api/v1/admin/deletslider/" +
+          id
+      )
       .then(function (response) {
         // console.log(response.data);
         toast.success("Testimonials Deleted");
@@ -119,7 +122,7 @@ function AdminTestimonials() {
                       <tr key={items?.id}>
                         <td className="text-center cart__img-box">
                           <img
-                            src={`http://localhost:8000/slider/${items?.image}`}
+                            src={`https://food-ecom-backend-1.onrender.com/slider/${items?.image}`}
                             alt="image1"
                           />
                         </td>{" "}

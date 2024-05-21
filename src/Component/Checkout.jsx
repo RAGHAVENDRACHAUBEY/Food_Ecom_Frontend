@@ -23,7 +23,10 @@ const Checkout = () => {
   const [address, setaddress] = useState([]);
   const getaddress = () => {
     axios
-      .get("http://localhost:8000/api/v1/user/getshipping/" + customer?._id)
+      .get(
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/getshipping/" +
+          customer?._id
+      )
       .then(function (response) {
         // handle success
         // console.log(response.data.product);
@@ -73,7 +76,7 @@ const Checkout = () => {
       const config = {
         url: "/addshipping",
         method: "post",
-        baseURL: "http://localhost:8000/api/v1/user",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/user",
         headers: { "content-type": "application/json" },
         data: {
           userId: coustomer._id,
@@ -119,7 +122,7 @@ const Checkout = () => {
       const config = {
         url: "/updateshippingaddress/" + update,
         method: "put",
-        baseURL: "http://localhost:8000/api/v1/user",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/user",
         headers: { "content-type": "application/json" },
         data: {
           // id: update?.id,
@@ -151,7 +154,10 @@ const Checkout = () => {
   const deleteaddress = (id, e) => {
     e.preventDefault();
     axios
-      .delete("http://localhost:8000/api/v1/user/deleteshipping/" + id)
+      .delete(
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/deleteshipping/" +
+          id
+      )
       .then(function (response) {
         console.log(response);
         window.location.reload();
@@ -189,7 +195,7 @@ const Checkout = () => {
           const config = {
             url: "/addorder",
             method: "post",
-            baseURL: "http://localhost:8000/api/v1/user",
+            baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/user",
             headers: { "content-type": "application/json" },
             data: [
               addedProducts.map((data) => ({

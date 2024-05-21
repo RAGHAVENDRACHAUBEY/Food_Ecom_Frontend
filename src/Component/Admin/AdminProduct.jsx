@@ -27,7 +27,7 @@ function AdminProduct() {
   // All Prodcut
   const getProdcut = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allproduct")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allproduct")
       .then(function (response) {
         // handle success
         // console.log(response.data.product);
@@ -46,7 +46,10 @@ function AdminProduct() {
   // Delete Product
   const deleteProduct = (id) => {
     axios
-      .delete("http://localhost:8000/api/v1/admin/deleteproduct/" + id)
+      .delete(
+        "https://food-ecom-backend-1.onrender.com/api/v1/admin/deleteproduct/" +
+          id
+      )
       .then(function (response) {
         // handle success
         console.log(response.data);
@@ -68,7 +71,7 @@ function AdminProduct() {
       const config = {
         url: "/updateproduct",
         method: "put",
-        baseURL: "http://localhost:8000/api/v1/admin",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/admin",
         headers: { "content-type": "multipart/form-data" },
         data: {
           id: editprodcutdata,
@@ -100,7 +103,7 @@ function AdminProduct() {
   // console.log(categories);
   const getcategory = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allcategory")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allcategory")
       .then(function (response) {
         // handle success
         // console.log(response.data);
@@ -195,25 +198,25 @@ function AdminProduct() {
                       <tr key={id}>
                         <td className="text-center cart__img-box">
                           <img
-                            src={`http://localhost:8000/product/${e?.productimage}`}
+                            src={`https://food-ecom-backend-1.onrender.com/product/${e?.productimage}`}
                             alt="image1"
                           />
                         </td>
                         <td className="text-center cart__img-box">
                           <img
-                            src={`http://localhost:8000/product/${e.productsubimage1}`}
+                            src={`https://food-ecom-backend-1.onrender.com/product/${e.productsubimage1}`}
                             alt="image2"
                           />
                         </td>
                         <td className="text-center cart__img-box">
                           <img
-                            src={`http://localhost:8000/product/${e.productsubimage2}`}
+                            src={`https://food-ecom-backend-1.onrender.com/product/${e.productsubimage2}`}
                             alt="image3"
                           />
                         </td>
                         <td className="text-center cart__img-box">
                           <img
-                            src={`http://localhost:8000/product/${e.productsubimage3}`}
+                            src={`https://food-ecom-backend-1.onrender.com/product/${e.productsubimage3}`}
                             alt="image4"
                           />
                         </td>

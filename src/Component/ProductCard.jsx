@@ -31,7 +31,7 @@ const ProductCard = (props) => {
         const config = {
           url: "/addWhishList",
           method: "post",
-          baseURL: "http://localhost:8000/api/v1/user",
+          baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/user",
           data: {
             productId: item,
             customerId: customer._id,
@@ -63,7 +63,7 @@ const ProductCard = (props) => {
   const getwislist = () => {
     axios
       .get(
-        "http://localhost:8000/api/v1/user/getWishlistByCustomerId/" +
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/getWishlistByCustomerId/" +
           customer?._id
       )
       .then(function (response) {
@@ -82,7 +82,7 @@ const ProductCard = (props) => {
       axios({
         method: "delete",
         url:
-          "http://localhost:8000/api/v1/user/removeWishlistbcustomeryId/" +
+          "https://food-ecom-backend-1.onrender.com/api/v1/user/removeWishlistbcustomeryId/" +
           customer?._id +
           "/" +
           item,
@@ -106,7 +106,7 @@ const ProductCard = (props) => {
       <div className="product__img">
         <Link to={`/fooddetails/${_id}`}>
           <img
-            src={`http://localhost:8000/product/${productimage}`}
+            src={`https://food-ecom-backend-1.onrender.com/product/${productimage}`}
             key={_id}
             alt="product-img"
             className="w-50"
@@ -141,11 +141,9 @@ const ProductCard = (props) => {
         <div className="dop_hero d-flex align-items-center justify-content-between ">
           <span className="product__price">${productprice}</span>
           {addedProducts?.filter((item) => item?._id === _id)?.length ? (
-            
-              <button className="addTOCart__btn">
-                <Link to="/cart">View cart</Link>
-              </button>
-          
+            <button className="addTOCart__btn">
+              <Link to="/cart">View cart</Link>
+            </button>
           ) : (
             <button
               className="addTOCart__btn"
@@ -153,7 +151,6 @@ const ProductCard = (props) => {
                 dispatch(
                   { type: "ADD_TO_CART", payload: props?.item },
                   toast.success("Product Added")
-                  
                 )
               }
             >

@@ -17,7 +17,7 @@ function Home1() {
   // console.log(products);
   const getProdcut = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allproduct")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allproduct")
       .then(function (response) {
         // handle success
         setnewproduct(response.data.product);
@@ -39,7 +39,7 @@ function Home1() {
   console.log(items);
   const getcategory = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allcategory")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allcategory")
       .then(function (response) {
         // handle success
         // console.log(response.data);

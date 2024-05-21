@@ -34,7 +34,7 @@ function AdminAddProduct() {
       const config = {
         url: "/addproduct",
         method: "post",
-        baseURL: "http://localhost:8000/api/v1/admin",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/admin",
         headers: { "content-type": "multipart/form-data" },
         data: {
           productname: producttitle,
@@ -66,7 +66,7 @@ function AdminAddProduct() {
   console.log(categories);
   const getcategory = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allcategory")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allcategory")
       .then(function (response) {
         // handle success
         console.log(response.data);

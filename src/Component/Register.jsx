@@ -8,108 +8,106 @@ function Register() {
   const [visible, setVisible] = useState(false);
   const [validated, setValidated] = useState(false);
 
-	const handleSubmit = (event) => {
-		const form = event.target;
-		if (form.checkValidity() === false) {
-		  event.preventDefault();
-		  event.stopPropagation();
-		}
-	
-		setValidated(true);
-	  };
-	
-	  function ValidateEmail(mail) {
-		if (
-		  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-			mail
-		  )
-		) {
-		  return true;
-		}
-		alert("You have entered an invalid email address!");
-		return false;
-	  }
-	
-	  function validatename(inputtxt) {
-		var phoneno = /^[a-zA-Z]{2,30}$/; // var no = /^\d{10}$/;
-		if (inputtxt.match(phoneno)) {
-		  return true;
-		} else {
-		  alert("You have entered an invalid name!");
-		  return false;
-		}
-	  }
-	
-	  function phonenumber(inputtxt) {
-		var phoneno = /^[6-9]\d{9}$/; // var no = /^\d{10}$/;
-		if (inputtxt.match(phoneno)) {
-		  return true;
-		} else {
-		  alert("You have entered an invalid mobile number!");
-		  return false;
-		}
-	  }
-	
-	  function CheckPassword(inputtxt) {
-		var decimal =
-		  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/;
-		if (inputtxt.match(decimal)) {
-		  return true;
-		} else {
-		  alert(
-			"Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character!"
-		  );
-		  return false;
-		}
-	  }
+  const handleSubmit = (event) => {
+    const form = event.target;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-	const [name, setname] = useState("");
-	const [phone, setphone] = useState("");
-	const [email, setemail] = useState("");
-	const [password, setpassword] = useState("");
-	
-	
-	const signup = async (e) => {
-    e.preventDefault()
-		if (!email | !password | !name | !phone) {
+    setValidated(true);
+  };
+
+  function ValidateEmail(mail) {
+    if (
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+        mail
+      )
+    ) {
+      return true;
+    }
+    alert("You have entered an invalid email address!");
+    return false;
+  }
+
+  function validatename(inputtxt) {
+    var phoneno = /^[a-zA-Z]{2,30}$/; // var no = /^\d{10}$/;
+    if (inputtxt.match(phoneno)) {
+      return true;
+    } else {
+      alert("You have entered an invalid name!");
+      return false;
+    }
+  }
+
+  function phonenumber(inputtxt) {
+    var phoneno = /^[6-9]\d{9}$/; // var no = /^\d{10}$/;
+    if (inputtxt.match(phoneno)) {
+      return true;
+    } else {
+      alert("You have entered an invalid mobile number!");
+      return false;
+    }
+  }
+
+  function CheckPassword(inputtxt) {
+    var decimal =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/;
+    if (inputtxt.match(decimal)) {
+      return true;
+    } else {
+      alert(
+        "Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character!"
+      );
+      return false;
+    }
+  }
+
+  const [name, setname] = useState("");
+  const [phone, setphone] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+
+  const signup = async (e) => {
+    e.preventDefault();
+    if (!email | !password | !name | !phone) {
       toast.error("Please Fill All The Field");
-		} else {
-			try {
-				if (
-					validatename(name) &&
-					ValidateEmail(email) &&
-					phonenumber(phone) &&
-					CheckPassword(password)
-				  ) {
-				const config = {
-					url: "/api/v1/auth/register",
-					method: "post",
-					baseURL: "http://localhost:8000",
-					headers: { "content-type": "application/json" },
-					data: {
-						name:name,
-						email:email,
-						phone:phone,
-						password:password,
-					
-					},
-				};
-				let res = await axios(config);
-				if (res.status === 200) {
-					console.log(res.data);
-					console.log(res.data.success);
-          toast.success("Signup Success");
-					window.location.assign("/login");
-				}
-			}
-			} catch (error) {
-				console.log(error.response);
-				if (error.response) {
+    } else {
+      try {
+        if (
+          validatename(name) &&
+          ValidateEmail(email) &&
+          phonenumber(phone) &&
+          CheckPassword(password)
+        ) {
+          const config = {
+            url: "/api/v1/auth/register",
+            method: "post",
+            baseURL: "https://food-ecom-backend-1.onrender.com",
+            headers: { "content-type": "application/json" },
+            data: {
+              name: name,
+              email: email,
+              phone: phone,
+              password: password,
+            },
+          };
+          let res = await axios(config);
+          if (res.status === 200) {
+            console.log(res.data);
+            console.log(res.data.success);
+            toast.success("Signup Success");
+            window.location.assign("/login");
+          }
+        }
+      } catch (error) {
+        console.log(error.response);
+        if (error.response) {
           toast.error(error.response.data.error);
-				}
-			}
-		}
-	};
+        }
+      }
+    }
+  };
   return (
     <>
       <>
@@ -184,8 +182,8 @@ function Register() {
                   type="submit"
                   className="addTOCart__btn mb-2"
                   style={{ width: "100%" }}
-                  onClick={(e)=>{
-                    signup(e)
+                  onClick={(e) => {
+                    signup(e);
                   }}
                 >
                   Register

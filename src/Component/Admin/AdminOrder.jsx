@@ -12,7 +12,7 @@ function AdminOrder() {
   const getData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/v1/user/getallorder"
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/getallorder"
       );
       if (res.status == 200) {
         setData(res.data.success);

@@ -12,7 +12,7 @@ function Wishlist() {
   const getwislist = () => {
     axios
       .get(
-        "http://localhost:8000/api/v1/user/getWishlistByCustomerId/" +
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/getWishlistByCustomerId/" +
           customer?._id
       )
       .then(function (response) {
@@ -30,7 +30,7 @@ function Wishlist() {
       axios({
         method: "delete",
         url:
-          "http://localhost:8000/api/v1/user/removeWishlistbcustomeryId/" +
+          "https://food-ecom-backend-1.onrender.com/api/v1/user/removeWishlistbcustomeryId/" +
           customer?._id +
           "/" +
           item?._id,
@@ -52,7 +52,7 @@ function Wishlist() {
   //       const config = {
   //         url: "/addToCartCustomer",
   //         method: "post",
-  //         baseURL: "http://localhost:8000/api",
+  //         baseURL: "https://food-ecom-backend-1.onrender.com/api",
   //         data: {
   //           productId: item?.productId?._id,
   //           customerId: customer.id,
@@ -116,7 +116,7 @@ function Wishlist() {
                                     href={`/single-pages/${items?.productId?._id}`}
                                   >
                                     <img
-                                      src={`http://localhost:8000/product/${items?.productId?.productimage}`}
+                                      src={`https://food-ecom-backend-1.onrender.com/product/${items?.productId?.productimage}`}
                                       alt="food-Image"
                                       className="img-fluid"
                                       style={{

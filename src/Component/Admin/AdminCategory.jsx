@@ -23,7 +23,7 @@ function AdminCategory() {
   // All Category
   const getcategory = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allcategory")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allcategory")
       .then(function (response) {
         // handle success
         // console.log(response.data);
@@ -50,7 +50,7 @@ function AdminCategory() {
       const config = {
         url: "/addcat",
         method: "post",
-        baseURL: "http://localhost:8000/api/v1/admin",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/admin",
         headers: { "content-type": "application/json" },
         data: {
           catname: name,
@@ -74,7 +74,7 @@ function AdminCategory() {
       const config = {
         url: "/update-category",
         method: "put",
-        baseURL: "http://localhost:8000/api/v1/admin",
+        baseURL: "https://food-ecom-backend-1.onrender.com/api/v1/admin",
         headers: { "content-type": "application/json" },
         data: {
           id: edit?._id,
@@ -97,7 +97,9 @@ function AdminCategory() {
   // Delete
   const deletecategory = (id) => {
     axios
-      .delete("http://localhost:8000/api/v1/admin/category/" + id)
+      .delete(
+        "https://food-ecom-backend-1.onrender.com/api/v1/admin/category/" + id
+      )
       .then(function (response) {
         // handle success
         console.log(response.data);

@@ -66,7 +66,7 @@ const Cart = () => {
 
                           <div className="image">
                             <img
-                              src={`http://localhost:8000/product/${item?.productimage}`}
+                              src={`https://food-ecom-backend-1.onrender.com/product/${item?.productimage}`}
                               alt=""
                             />
                           </div>

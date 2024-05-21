@@ -17,7 +17,7 @@ function Login() {
         const config = {
           url: "/api/v1/auth/login",
           method: "post",
-          baseURL: "http://localhost:8000",
+          baseURL: "https://food-ecom-backend-1.onrender.com",
           headers: { "content-type": "application/json" },
           data: {
             email: email,

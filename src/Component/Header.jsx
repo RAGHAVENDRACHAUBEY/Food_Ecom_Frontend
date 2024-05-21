@@ -62,7 +62,7 @@ function Header() {
   // console.log(product);
   const getProdcut = () => {
     axios
-      .get("http://localhost:8000/api/v1/admin/allproduct")
+      .get("https://food-ecom-backend-1.onrender.com/api/v1/admin/allproduct")
       .then(function (response) {
         // handle success
         setproduct(response.data.product);
@@ -86,7 +86,10 @@ function Header() {
   const signout = () => {
     try {
       axios
-        .get("http://localhost:8000/api/v1/auth/logout/" + user._id)
+        .get(
+          "https://food-ecom-backend-1.onrender.com/api/v1/auth/logout/" +
+            user._id
+        )
         .then(function (res) {
           if (res.status == 200) {
             sessionStorage.removeItem("user");
@@ -110,7 +113,7 @@ function Header() {
   const getwislist = () => {
     axios
       .get(
-        "http://localhost:8000/api/v1/user/getWishlistByCustomerId/" +
+        "https://food-ecom-backend-1.onrender.com/api/v1/user/getWishlistByCustomerId/" +
           customer?._id
       )
       .then(function (response) {
@@ -190,7 +193,7 @@ function Header() {
                       <a href={`/fooddetails/${item?._id}`}>
                         <div className="search-food_0">
                           <img
-                            src={`http://localhost:8000/product/${item.productimage}`}
+                            src={`https://food-ecom-backend-1.onrender.com/product/${item.productimage}`}
                             alt="search-image"
                             style={{ width: "40px", height: "40px" }}
                           />
