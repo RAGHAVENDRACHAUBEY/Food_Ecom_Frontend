@@ -103,7 +103,7 @@ function AdminProduct() {
       .get("http://localhost:8000/api/v1/admin/allcategory")
       .then(function (response) {
         // handle success
-        console.log(response.data);
+        // console.log(response.data);
         setcategories(response.data.success);
       })
       .catch(function (error) {

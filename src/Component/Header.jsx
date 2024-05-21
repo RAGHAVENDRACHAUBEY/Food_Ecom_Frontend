@@ -114,7 +114,7 @@ function Header() {
           customer?._id
       )
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         setwishlist(response.data.success);
       })
       .catch(function (error) {
@@ -243,7 +243,23 @@ function Header() {
 
               {user ? (
                 <>
-                  <span
+                  <div class="dropdown">
+                    <a
+                      className="user"
+                      style={{ fontSize: "18px", fontWeight: "bold" }}
+                    >
+                      {user.name}
+                    </a>
+                    <div className="dropdown-content">
+                      <span>
+                        <a href="orders">Order</a>
+                      </span>
+                      <span>
+                        <a onClick={signout}>Logout</a>
+                      </span>
+                    </div>
+                  </div>
+                  {/* <span
                     className="user"
                     style={{ fontSize: "18px", fontWeight: "bold" }}
                   >
@@ -255,7 +271,7 @@ function Header() {
                     style={{ fontSize: "18px", fontWeight: "bold" }}
                   >
                     <a>Logout</a>
-                  </span>
+                  </span> */}
                 </>
               ) : (
                 <>

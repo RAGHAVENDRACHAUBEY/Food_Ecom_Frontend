@@ -9,8 +9,17 @@ import { toast } from "react-toastify";
 import { Country, State, City } from "country-state-city";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useSelector } from "react-redux";
+import useRazorpay from "react-razorpay";
 
 const Checkout = () => {
+  const { addedProducts, totalQty, subTotalPrice, totalPrice } = useSelector(
+    (state) => state.products
+  );
+
+  const Razorpay = useRazorpay();
+  // console.log("addedProducts", addedProducts);
+  const paymentmethod1 = ["Online Payment", "Cash on Delivery"];
   const [address, setaddress] = useState([]);
   const getaddress = () => {
     axios
@@ -51,6 +60,9 @@ const Checkout = () => {
   const CityList = City.getCitiesOfState(country, state);
 
   const coustomer = JSON.parse(sessionStorage.getItem("user"));
+  const [checkradio, setcheckradio] = useState("");
+  const [paymentmethod, setpaymentmethod] = useState("");
+  const [payid, setpayid] = useState("");
 
   const addaddress = async (e) => {
     e.preventDefault();
@@ -76,8 +88,8 @@ const Checkout = () => {
       };
       await axios(config).then(function (res) {
         if ((res.status = 200)) {
-          console.log("success");
-          console.log(res.data.success);
+          // console.log("success");
+          // console.log(res.data.success);
           toast.success("Address Added");
           window.location.reload();
         }
@@ -123,8 +135,8 @@ const Checkout = () => {
       };
       await axios(config).then(function (res) {
         if ((res.status = 200)) {
-          console.log("success");
-          console.log(res.data.success);
+          // console.log("success");
+          // console.log(res.data.success);
           toast.success("Address Added");
           window.location.reload();
         }
@@ -156,12 +168,132 @@ const Checkout = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [acc, setacc] = useState("");
+
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const addPlaceOrder = async () => {
+    if (checkradio) {
+      if (!paymentmethod) {
+        toast.error("Please select the Payment method");
+      } else
+        try {
+          const config = {
+            url: "/addorder",
+            method: "post",
+            baseURL: "http://localhost:8000/api/v1/user",
+            headers: { "content-type": "application/json" },
+            data: [
+              addedProducts.map((data) => ({
+                customerId: customer._id,
+                productId: data._id,
+                oname: checkradio.name,
+                ophoneNumber: checkradio.mobile,
+                oemail: checkradio.email,
+                ocity: checkradio.city,
+                opincode: checkradio.pincode,
+                ocountry: checkradio.country,
+                address: checkradio.state,
+                productname: data.productname,
+                quantity: data.qty,
+                totalPrice: data.productprice * data.qty,
+                paymentId: payid,
+                paymentmethod: paymentmethod,
+              })),
+            ],
+          };
+          await axios(config).then(function (res) {
+            if ((res.status = 200)) {
+              // console.log("success");
+              toast.success("Order Placed Successfully");
+              localStorage.removeItem("addedProducts");
+              localStorage.removeItem("totalQty");
+              localStorage.removeItem("subTotalPrice");
+              localStorage.removeItem("totalPrice");
+              window.location.assign("/");
+            }
+          });
+        } catch (error) {
+          console.log(error);
+          alert("Somthing went wrong");
+        }
+    } else {
+      toast.error("Please select the shipping address");
+    }
+  };
+
+  const postTransaction = async () => {
+    if (!checkradio) {
+      toast.error("Please select the shipping address");
+    } else if (!paymentmethod) {
+      toast.error("Please select the Payment method");
+    } else if (paymentmethod !== "Online Payment") {
+      addPlaceOrder();
+    } else {
+      try {
+        const res = await loadScript(
+          "https://checkout.razorpay.com/v1/checkout.js"
+        );
+        if (!res) {
+          toast.error("Failed to load Razorpay SDK");
+          return;
+        }
+
+        const options = {
+          key: "rzp_test_5vCRZ6rLM2wGN4",
+          amount: totalPrice.toFixed(2) * 100,
+          currency: "INR",
+          name: "Food",
+          description: "Order Amount",
+          image: "../images/food-logo-footer.png",
+          handler: function (response) {
+            toast.success("Payment Successful");
+            setpayid(response.razorpay_payment_id);
+          },
+          prefill: {
+            name: customer?.name,
+            email: customer?.email,
+            contact: customer?.phoneNumber,
+          },
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+      } catch (error) {
+        console.error("Error in initiating payment:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (payid) {
+      addPlaceOrder();
+    }
+  }, [payid]);
+
   return (
     <Helmet title="Checkout">
       <Commonsection title="Checkout" />
       <section>
         <Container>
           <h6 className="mb-4">Shipping Address</h6>
+          <button
+            type="submit"
+            className="addTOCart__btn mx-2"
+            onClick={() => {
+              setacc(!acc);
+            }}
+          >
+            Add Address
+          </button>
           <div className="row">
             <div className="col-md-6">
               {address?.map((items) => {
@@ -169,7 +301,13 @@ const Checkout = () => {
                   <div className="deffer" key={items?.toString()}>
                     <div className="addre_0">
                       <div>
-                        <input type="radio" />
+                        <input
+                          type="radio"
+                          name="radiovalues"
+                          id="address"
+                          value={checkradio}
+                          onChange={(e) => setcheckradio(items)}
+                        />
                       </div>
                       <div className="ecom-ad">
                         <div>{items.name},</div>
@@ -179,9 +317,9 @@ const Checkout = () => {
                         </div>
                         <div>
                           {items?.pincode},{" "}
-                          <span className="px-2">{items?.country}</span>{" "}
-                          <span className="px-2">{items?.state}</span>,{" "}
                           <span className="px-2">{items?.city}</span>,{" "}
+                          <span className="px-2">{items?.state}</span>,{" "}
+                          <span className="px-2">{items?.country}</span>{" "}
                         </div>
                       </div>
                     </div>
@@ -195,7 +333,7 @@ const Checkout = () => {
                           handleShow();
                         }}
                       >
-                        Edit
+                        <i class="ri-edit-box-line"></i>
                       </button>
                       <button
                         type="submit"
@@ -204,145 +342,186 @@ const Checkout = () => {
                           deleteaddress(items?._id, e);
                         }}
                       >
-                        Delete
+                        <i class="ri-delete-bin-6-line"></i>
                       </button>
                     </div>
                   </div>
                 );
               })}
             </div>
-
-            <div className="col-md-6"></div>
-          </div>
-
-          <Row>
-            <Col lg="12" md="12">
-              <form className="checkout__form">
-                <Row>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Enter your name"
-                        value={name}
-                        onChange={(e) => setname(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setemail(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <input
-                        type="number"
-                        placeholder="Phone number"
-                        value={mobile}
-                        onChange={(e) => setmobile(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <select
-                        className="addinput11"
-                        name="Country"
-                        required
-                        onChange={(e) => setcountry(e.target.value)}
-                      >
-                        <option value="">Select Country</option>
-                        {CountryList.map((Country) => (
-                          <option value={Country.isoCode}>
-                            {Country.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <select
-                        className="addinput11"
-                        name="State"
-                        required
-                        onChange={(e) => setstate(e.target.value)}
-                      >
-                        <option value="">Select State</option>
-                        {StateList.map((state1) => (
-                          <option value={state1.isoCode}>{state1.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    <div className="form__group">
-                      <select
-                        className="addinput11"
-                        name="City"
-                        required
-                        onChange={(e) => setcity(e.target.value)}
-                      >
-                        <option value="">Select City</option>
-                        {CityList.map((city1) => (
-                          <option value={city1.name}>{city1.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </Col>
-                  <Col md="6">
-                    {" "}
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Pin Code"
-                        value={pincode}
-                        onChange={(e) => setpincode(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </Col>
-                </Row>
-
-                <button
-                  type="submit"
-                  className="addTOCart__btn"
-                  onClick={addaddress}
-                >
-                  Submit
-                </button>
-              </form>
-            </Col>
-
-            {/* <Col lg="4" md="6">
+            <div className="col-md-6">
+              {/* <Col lg="6" md="6"> */}
               <div className="checkout__bill">
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  Subtotal: <span>${cartTotalAmount}</span>
+                  Subtotal:
+                  <span>${totalPrice}</span>
                 </h6>
-                <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  Shipping: <span>${shippingCost}</span>
-                </h6>
+
                 <div className="checkout__total">
                   <h5 className="d-flex align-items-center justify-content-between">
-                    Total: <span>${totalAmount}</span>
+                    Total:
+                    <span>${totalPrice}</span>
                   </h5>
                 </div>
+                <Button
+                  className="addTOCart__btn checkout_button"
+                  onClick={postTransaction}
+                >
+                  {/* <div style={{color:"white"}}> */}
+                  PAYMENT
+                  {/* </div> */}
+                </Button>
               </div>
-            </Col> */}
+            </div>
+            {/* </Col> */}
+          </div>
+          <div
+            style={{
+              border: "1px solid green",
+              width: "fit-content",
+              padding: "6px 120px 5px 10px",
+            }}
+          >
+            <h6>PAYMENT TYPE</h6>
+            <div className="addre_0">
+              {paymentmethod1.map((item) => (
+                <>
+                  <input
+                    style={{ marginLeft: "5px" }}
+                    type="radio"
+                    id="address"
+                    name="radiovalues"
+                    value={paymentmethod}
+                    onChange={(e) => setpaymentmethod(item)}
+                  />
+                  <label for="address" className="mb-0">
+                    {item}
+                  </label>
+                </>
+              ))}
+            </div>
+          </div>
+          <Row>
+            {acc ? (
+              <>
+                {" "}
+                <Col lg="6" md="6">
+                  <form className="checkout__form">
+                    <Row>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <input
+                            type="text"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setname(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setemail(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <input
+                            type="number"
+                            placeholder="Phone number"
+                            value={mobile}
+                            onChange={(e) => setmobile(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <select
+                            className="addinput11"
+                            name="Country"
+                            required
+                            onChange={(e) => setcountry(e.target.value)}
+                          >
+                            <option value="">Select Country</option>
+                            {CountryList.map((Country) => (
+                              <option value={Country.isoCode}>
+                                {Country.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <select
+                            className="addinput11"
+                            name="State"
+                            required
+                            onChange={(e) => setstate(e.target.value)}
+                          >
+                            <option value="">Select State</option>
+                            {StateList.map((state1) => (
+                              <option value={state1.isoCode}>
+                                {state1.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        <div className="form__group">
+                          <select
+                            className="addinput11"
+                            name="City"
+                            required
+                            onChange={(e) => setcity(e.target.value)}
+                          >
+                            <option value="">Select City</option>
+                            {CityList.map((city1) => (
+                              <option value={city1.name}>{city1.name}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </Col>
+                      <Col md="6">
+                        {" "}
+                        <div className="form__group">
+                          <input
+                            type="text"
+                            placeholder="Pin Code"
+                            value={pincode}
+                            onChange={(e) => setpincode(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <button
+                      type="submit"
+                      className="addTOCart__btn"
+                      onClick={addaddress}
+                    >
+                      Submit
+                    </button>
+                  </form>
+                </Col>
+              </>
+            ) : (
+              <></>
+            )}
           </Row>
         </Container>
       </section>

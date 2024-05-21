@@ -13,7 +13,7 @@ import Cart from "./Component/Cart";
 import Checkout from "./Component/Checkout";
 import FournotFour from "./Component/FournotFour";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/reset.css";
 import Dashboard from "./Component/Admin/Dashboard";
 import DashboardHome from "./Component/Admin/DashboardHome";
@@ -27,6 +27,7 @@ import AdminLogin from "./Component/Admin/AdminLogin";
 import AdminProdcutDetails from "./Component/Admin/AdminProdcutDetails";
 import Whishlist from "./Component/Whishlist";
 import AdminTestimonials from "./Component/Admin/AdminTestimonials";
+import Order from "./Component/Order";
 
 function App() {
   return (
@@ -255,11 +256,36 @@ function App() {
           />
           <Route
             exact
+            path="/admin-orders"
+            element={
+              <Dashboard
+                children={
+                  <>
+                    <AdminHeader />
+                    <AdminOrder />
+                  </>
+                }
+              />
+            }
+          />
+          <Route
+            exact
             path="/*"
             element={
               <>
                 <Header />
                 <FournotFour />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            exact
+            path="/orders"
+            element={
+              <>
+                <Header />
+                <Order />
                 <Footer />
               </>
             }
